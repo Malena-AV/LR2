@@ -74,6 +74,10 @@ namespace рпм2
         {
             return "проводит лекции";
         }
+        public override string ToString()
+        {
+            return name + " " + dolj;
+        }
     }
     public class Student : IZayavlen // реализация интерфейса студента
     {
@@ -108,8 +112,8 @@ namespace рпм2
             Kadrovik one = new Kadrovik("К.Е.В.", "кадровик");
             Console.WriteLine(one.GetFio());
             Console.WriteLine(one.GetDol());
-            Console.WriteLine(one.GetCosdaetSt("rtfer", "dcjs"));
-            Console.WriteLine(one.GetCosdaetPr("rfr", "geg"));
+            Console.WriteLine(one.GetCosdaetSt("Н.И.Э.", "3-1п9"));
+            Console.WriteLine(one.GetCosdaetPr("П.З.А.", "преподаватель"));
             Console.WriteLine("    ");
             Propodavatel two = new Propodavatel("Н.М.Х.", "преподаватель");
             Console.WriteLine(two.GetFio());
