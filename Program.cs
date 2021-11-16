@@ -10,6 +10,10 @@ namespace рпм2
     {
         string GetDol();
     }
+    //interface IDolsnoct2 : IFio
+    //{
+    //    string GetDol();
+    //}
     interface IGropp : IFio
     {
         string GetGropp();
@@ -17,7 +21,7 @@ namespace рпм2
     interface ICosdaet : IDolsnoct
     {
         Student GetCosdaetSt(string name, string grup);
-        Propodavatel GetCosdaetPr(string name, string dolj);
+        Propodavatel GetCosdaetPr(string name, Prepod dolj);
     }
     interface ILekcee : IDolsnoct
     {
@@ -27,19 +31,23 @@ namespace рпм2
     {
         string GetZayavlen();
     }
-    /// <summary>
-    /// реализация интерфейса кадровка
-    /// </summary>
-    public class Kadrovik : ICosdaet
+    public abstract class Person
     {
-        string name;
-        public Kadrovik(string x)
+        public string Name;
+        public Person(string name)
         {
-            this.name = x;
+            this.Name = name;
+        }
+    }
+    public class Kadrovik : Person, ICosdaet
+    {
+        public Kadrovik(string name) : base(name)
+        {
+
         }
         public string GetFio()
         {
-            return name;
+            return Name;
         }
         public string GetDol()
         {
@@ -49,27 +57,37 @@ namespace рпм2
         {
             return new Student(nameS, grup);
         }
-        public Propodavatel GetCosdaetPr(string namePr, string dolj)
+        public Propodavatel GetCosdaetPr(string namePr, Prepod dolj)
         {
             return new Propodavatel(namePr, dolj);
         }
     }
-    public class Propodavatel : ILekcee 
+    public enum Prepod
     {
-        string name;
-        string dolj;
-        public Propodavatel(string x, string y)
+        Assistant,
+        StLecturer,
+    }
+    public class Propodavatel: Person, ILekcee 
+    {
+        Prepod dolj;
+        public Propodavatel(string Name, Prepod dolj) : base(Name)
         {
-            this.name = x;
-            this.dolj = y;
+            this.dolj = dolj;
         }
         public string GetFio()
         {
-            return name;
+            return Name;
         }
         public string GetDol()
         {
-            return dolj;
+            if (dolj == Prepod.Assistant)
+            {
+                return "Ассистент";
+            }
+            else
+            {
+                return "Старший преподаватель";
+            }
         }
         public string GetLekcee()
         {
@@ -77,21 +95,19 @@ namespace рпм2
         }
         public override string ToString()
         {
-            return name + " " + dolj;
+            return Name + " " + dolj;
         }
     }
-    public class Student : IZayavlen 
+    public class Student : Person, IZayavlen 
     {
-        string name;
         string grup;
-        public Student(string x, string y)
+        public Student(string Name, string Grup): base (Name)
         {
-            this.name = x;
-            this.grup = y;
+            this.grup = Grup;
         }
         public string GetFio()
         {
-            return name;
+            return Name;
         }
         public string GetGropp()
         {
@@ -103,34 +119,28 @@ namespace рпм2
         }
         public override string ToString()
         {
-            return name + " " + grup;
+            return Name + " " + grup;
         }
     }
     class Program
     {
         static void Main(string[] args)
         {
+
+ 
             Kadrovik one = new Kadrovik("К.Е.В.");
             Console.WriteLine(one.GetFio());
-            Console.WriteLine(one.GetDol());
-            string nameS = "Н.З.Ш.";
-            string grup = "3-1п9";
-            Student four = one.GetCosdaetSt(nameS, grup);
+            Console.WriteLine(one.GetDol() + "\n");
+            Student four = one.GetCosdaetSt("Н.З.Ш.", "3-1п9");
             Console.WriteLine(four.GetFio());
-            Console.WriteLine(four.GetGropp());
-            string namePr = "Р.О.Г.";
-            string dolj = "преподаватель";
-            Propodavatel five = one.GetCosdaetPr(namePr, dolj);
+            Console.WriteLine(four.GetGropp() + "\n");
+            Propodavatel five = one.GetCosdaetPr("Р.О.Г.", Prepod.Assistant);
             Console.WriteLine(five.GetFio());
-            Console.WriteLine(five.GetDol());
-            Propodavatel two = new Propodavatel("А.Х.Г.", "преподаватель");
+            Console.WriteLine(five.GetDol() + "\n");
+            Propodavatel two = new Propodavatel("А.Х.Г.", Prepod.StLecturer);
             Console.WriteLine(two.GetFio());
             Console.WriteLine(two.GetDol());
             Console.WriteLine(two.GetLekcee() + "\n");
-            Student three = new Student("П.Г.А.", "3-19");
-            Console.WriteLine(three.GetFio());
-            Console.WriteLine(three.GetGropp());
-            Console.WriteLine(three.GetZayavlen());
         }
     }
 }
