@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace рпм2
 {
@@ -10,10 +11,6 @@ namespace рпм2
     {
         string GetDol();
     }
-    //interface IDolsnoct2 : IFio
-    //{
-    //    string GetDol();
-    //}
     interface IGropp : IFio
     {
         string GetGropp();
@@ -33,25 +30,33 @@ namespace рпм2
     }
     public abstract class Person
     {
-        public string Name;
+        string Name;
         public Person(string name)
         {
             this.Name = name;
-        }
-    }
-    public class Kadrovik : Person, ICosdaet
-    {
-        public Kadrovik(string name) : base(name)
-        {
-
         }
         public string GetFio()
         {
             return Name;
         }
+    }
+    public class Sotrudnik: Person
+    {
+        string dolj;
+        public Sotrudnik (string name, string dolj): base (name)
+        {
+            this.dolj = dolj;
+        }
         public string GetDol()
         {
-            return "Кадровик";
+            return dolj;
+        }
+    }
+    public class Kadrovik : Sotrudnik, ICosdaet
+    {
+        public Kadrovik(string name): base(name, "кадровик")
+        {
+            
         }
         public Student GetCosdaetSt(string nameS, string grup)
         {
@@ -64,38 +69,20 @@ namespace рпм2
     }
     public enum Prepod
     {
-        Assistant,
-        StLecturer,
+        Assistant = 0,
+        StLecturer = 1
     }
-    public class Propodavatel: Person, ILekcee 
+
+    public class Propodavatel: Sotrudnik, ILekcee 
     {
-        Prepod dolj;
-        public Propodavatel(string Name, Prepod dolj) : base(Name)
+        static string[] dol = new string[] { "Ассистент" , "Старший преподаватель" };
+        public Propodavatel(string Name, Prepod dolj) : base(Name, dol[(int)dolj])
         {
-            this.dolj = dolj;
-        }
-        public string GetFio()
-        {
-            return Name;
-        }
-        public string GetDol()
-        {
-            if (dolj == Prepod.Assistant)
-            {
-                return "Ассистент";
-            }
-            else
-            {
-                return "Старший преподаватель";
-            }
+      
         }
         public string GetLekcee()
         {
             return "проводит лекции";
-        }
-        public override string ToString()
-        {
-            return Name + " " + dolj;
         }
     }
     public class Student : Person, IZayavlen 
@@ -105,10 +92,6 @@ namespace рпм2
         {
             this.grup = Grup;
         }
-        public string GetFio()
-        {
-            return Name;
-        }
         public string GetGropp()
         {
             return grup;
@@ -116,10 +99,6 @@ namespace рпм2
         public string GetZayavlen()
         {
             return "заявление на отчисление";
-        }
-        public override string ToString()
-        {
-            return Name + " " + grup;
         }
     }
     class Program
